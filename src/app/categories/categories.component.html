@@ -1,0 +1,20 @@
+<div class="container">
+    <h1>Categories</h1>
+    <div class="categories">
+        <table class="table table-striped mx-auto w-75">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Display Order</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let category of categories">
+                <tr>
+                    <td>{{category.name}}</td>
+                    <td>{{category.displayOrder}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
