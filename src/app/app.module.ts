@@ -7,11 +7,22 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { CategoriesComponent } from './categories/categories.component';
 import { AddCategoryComponent } from './categories/add-category/add-category.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
+import { ProductsComponent } from './products/products.component';
+import { AddProductComponent } from './products/add-product/add-product.component';
+import { EditProductComponent } from './products/edit-product/edit-product.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
-  declarations: [AppComponent, CategoriesComponent, AddCategoryComponent],
+  declarations: [
+    AppComponent,
+    CategoriesComponent,
+    AddCategoryComponent,
+    ProductsComponent,
+    AddProductComponent,
+    EditProductComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -20,6 +31,8 @@ import { ToastrModule } from 'ngx-toastr';
     BrowserAnimationsModule,
     TooltipModule.forRoot(),
     ToastrModule.forRoot(),
+    NgxSpinnerModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

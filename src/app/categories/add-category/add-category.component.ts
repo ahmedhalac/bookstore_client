@@ -30,13 +30,12 @@ export class AddCategoryComponent implements OnInit {
     }
   }
 
-  async onSubmit(form: NgForm): Promise<void> {
+  onSubmit(form: NgForm): void {
     if (form.valid) {
       if (this.isEditFlow) {
-        await this.updateCategory();
-        this.onBackToList();
+        this.updateCategory();
       } else {
-        await this.addCategory(form);
+        this.addCategory(form);
       }
     }
   }
@@ -72,6 +71,7 @@ export class AddCategoryComponent implements OnInit {
     this.apiService.updateCategory(this.id, this.category).subscribe({
       next: () => {
         this.toastr.success('You updated category!');
+        this.onBackToList();
       },
       error: (error) => {
         console.error(error);

@@ -3,6 +3,8 @@ import { ApiService } from '../services/api.service';
 import { Category } from '../models/category';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { CommonService } from '../services/common.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-categories',
@@ -16,11 +18,13 @@ export class CategoriesComponent implements OnInit {
     private apiService: ApiService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private commonService: CommonService,
+    private spinner: NgxSpinnerService
   ) {}
 
-  async ngOnInit(): Promise<void> {
-    await this.getCategories();
+  ngOnInit(): void {
+    this.getCategories();
   }
 
   onAddCategoryClick(): void {
@@ -28,10 +32,16 @@ export class CategoriesComponent implements OnInit {
   }
 
   getCategories(): void {
+    this.spinner.show();
     this.apiService.getCategories().subscribe({
-      next: (categories) => (this.categories = categories),
+      next: (categories) => {
+        this.categories = categories;
+        this.commonService.sortArrayById(this.categories);
+        this.spinner.hide();
+      },
       error: (error) => {
         console.error('Error fetching categories', error);
+        this.spinner.hide();
         this.toastr.error(error.message);
       },
     });
