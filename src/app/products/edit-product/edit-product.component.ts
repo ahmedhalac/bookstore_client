@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { Category } from 'src/app/models/category';
 import { Product } from 'src/app/models/product';
 import { ApiService } from 'src/app/services/api.service';
 
@@ -12,6 +14,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class EditProductComponent {
   product!: Product;
+  categories: Category[] = [];
   productForm!: FormGroup;
   id: number = 0;
 
@@ -20,7 +23,8 @@ export class EditProductComponent {
     private apiService: ApiService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private spinner: NgxSpinnerService
   ) {}
 
   ngOnInit(): void {
@@ -29,6 +33,7 @@ export class EditProductComponent {
       this.getProduct(this.id);
     }
     this.initializeFrom();
+    this.getCategories();
   }
 
   initializeFrom(): void {
@@ -41,6 +46,8 @@ export class EditProductComponent {
       price: '',
       price50: '',
       price100: '',
+      categoryId: '',
+      imageUrl: '',
     });
   }
 
@@ -76,6 +83,21 @@ export class EditProductComponent {
       },
       error: (error) => {
         console.error(error);
+        this.toastr.error(error.message);
+      },
+    });
+  }
+
+  getCategories(): void {
+    this.spinner.show();
+    this.apiService.getCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+        this.spinner.hide();
+      },
+      error: (error) => {
+        console.error('Error fetching categories', error);
+        this.spinner.hide();
         this.toastr.error(error.message);
       },
     });

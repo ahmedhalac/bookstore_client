@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Category } from 'src/app/models/category';
 import { Product } from 'src/app/models/product';
 import { ApiService } from 'src/app/services/api.service';
 
@@ -12,6 +13,7 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class AddProductComponent {
   product!: Product;
+  categories: Category[] = [];
   productForm!: FormGroup;
 
   constructor(
@@ -23,6 +25,7 @@ export class AddProductComponent {
 
   ngOnInit(): void {
     this.initializeFrom();
+    this.getCategories();
   }
 
   initializeFrom(): void {
@@ -35,6 +38,8 @@ export class AddProductComponent {
       price: '',
       price50: '',
       price100: '',
+      categoryId: '',
+      imageUrl: '',
     });
   }
 
@@ -56,6 +61,18 @@ export class AddProductComponent {
       },
       error: (error) => {
         console.error(error);
+        this.toastr.error(error.message);
+      },
+    });
+  }
+
+  getCategories(): void {
+    this.apiService.getCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+      },
+      error: (error) => {
+        console.error('Error fetching categories', error);
         this.toastr.error(error.message);
       },
     });
